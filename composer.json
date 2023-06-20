@@ -1,0 +1,14 @@
+{
+  "name": "giantpeach/blocks",
+  "autoload": {
+    "psr-4": {
+      "Giantpeach\\Blocks\\": "src"
+    }
+  },
+  "authors": [
+    {
+      "name": "Giant Peach"
+    }
+  ],
+  "require": {}
+}
