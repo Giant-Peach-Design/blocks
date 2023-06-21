@@ -2,7 +2,7 @@
   "name": "giantpeach/blocks",
   "autoload": {
     "psr-4": {
-      "Giantpeach\\Blocks\\": "src"
+      "Giantpeach\\Schnapps\\Blocks\\": "src"
     }
   },
   "authors": [

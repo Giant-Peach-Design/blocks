@@ -1,8 +1,8 @@
 <?php
 
-namespace Giantpeach\Blocks;
+namespace Giantpeach\Schnapps\Blocks;
 
-use Giantpeach\Blocks\Interfaces\BlockInterface;
+use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;
 
 class Block implements BlockInterface
 {

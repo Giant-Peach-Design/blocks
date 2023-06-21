@@ -1,8 +1,8 @@
 <?php
 
-namespace Giantpeach\Blocks;
+namespace Giantpeach\Schnapps\Blocks;
 
-use Giantpeach\Blocks\Cli\Cli;
+use Giantpeach\Schnapps\Blocks\Cli\Cli;
 
 class Blocks
 {

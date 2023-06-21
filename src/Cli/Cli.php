@@ -1,6 +1,6 @@
 <?php
 
-namespace Giantpeach\Blocks\Cli;
+namespace Giantpeach\Schnapps\Blocks\Cli;
 
 class Cli
 {
@@ -36,7 +36,7 @@ class Cli
     $blockJsonPath = $blockPath . '/block.json';
     $blockClassPath = $blockPath . '/' . $args[0] . '.php';
 
-    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Blocks\\\%s\\\%s::display", $className, $className);
+    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\%s\\\%s::display", $className, $className);
 
     $displayFunc = sprintf(
       "public static function display(): void {
@@ -97,10 +97,10 @@ class Cli
       $class = <<<EOT
       <?php
       
-      namespace Giantpeach\Schnapps\Blocks\\$className;
+      namespace Giantpeach\Schnapps\Theme\Blocks\\$className;
       
-      use Giantpeach\Blocks\Interfaces\BlockInterface;
-      use Giantpeach\Blocks\Block;
+      use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;
+      use Giantpeach\Schnapps\Blocks\Block;
 
       class $className extends Block implements BlockInterface
       {
