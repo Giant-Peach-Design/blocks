@@ -1,5 +1,14 @@
 {
   "name": "giantpeach/blocks",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../*",
+      "options": {
+        "symlink": false
+      }
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Giantpeach\\Schnapps\\Blocks\\": "src"
@@ -10,5 +19,7 @@
       "name": "Giant Peach"
     }
   ],
-  "require": {}
+  "require": {
+    "giantpeach/twiglet": "@dev"
+  }
 }
