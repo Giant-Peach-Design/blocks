@@ -8,6 +8,14 @@ use Giantpeach\Schnapps\Twiglet\Twiglet;
 class Block implements BlockInterface
 {
   static $blockName = 'giantpeach/block';
+  protected $isAdmin = false;
+
+  public function __construct()
+  {
+    if (is_admin()) {
+      $this->isAdmin = true;
+    }
+  }
 
   public function render(): void
   {
