@@ -77,7 +77,7 @@ class Cli
           "giantpeach"
         ],
         "supports": {
-          "jsx": true,
+          "jsx": true
         },
         "acf": {
           "mode": "preview",
