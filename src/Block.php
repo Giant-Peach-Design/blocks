@@ -38,6 +38,10 @@ class Block implements BlockInterface
       $classes['prose']['color'] = 'prose-' . get_field('colour');
     }
 
+    if (get_field('block_spacing')) {
+      $classes['block']['spacing'] = get_field('block_spacing');
+    }
+
     return $classes;
   }
 
