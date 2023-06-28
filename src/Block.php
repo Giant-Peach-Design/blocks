@@ -42,6 +42,8 @@ class Block implements BlockInterface
       $classes['block']['spacing'] = get_field('block_spacing');
     }
 
+    $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
+
     return $classes;
   }
 
