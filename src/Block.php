@@ -7,7 +7,7 @@ use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 class Block implements BlockInterface
 {
-  static $blockName = 'giantpeach/block';
+  public string $blockName = 'giantpeach/block';
   protected $isAdmin = false;
 
   /**
@@ -23,6 +23,7 @@ class Block implements BlockInterface
     }
 
     $this->classes = $this->getClasses();
+    $this->blockName = self::getBlockName();
   }
 
   /**
@@ -56,7 +57,7 @@ class Block implements BlockInterface
 
   public static function getBlockName(): string
   {
-    return self::$blockName;
+    return 'giantpeach/block';
   }
 
   public static function registerBlock(): void
