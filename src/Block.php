@@ -10,6 +10,13 @@ class Block implements BlockInterface
   public static string $blockName = 'giantpeach/block';
   protected $isAdmin = false;
 
+  public array $blockSpacing = [
+    "default" => "py-8 md:py-16",
+    "short" => "py-4 md:py-8",
+    "tall" => "py-16 md:py-24",
+    "none" => "py-0",
+  ];
+
   /**
    * Array of classes that can be added to the block
    * @var array
@@ -38,11 +45,8 @@ class Block implements BlockInterface
       $classes['prose']['color'] = 'prose-' . get_field('colour');
     }
 
-    if (get_field('block_spacing')) {
-      $classes['block']['spacing'] = get_field('block_spacing');
-    }
-
     $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
+    $classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
 
     return $classes;
   }

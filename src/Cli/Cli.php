@@ -32,7 +32,7 @@ class Cli
     $variableName = "$" . lcfirst($args[0]);
 
     $blockPath = get_template_directory() . '/src/Blocks/' . $args[0];
-    $blockTemplatePath = $blockPath . '/template.php';
+    $blockTemplatePath = $blockPath . '/view.twig';
     $blockJsonPath = $blockPath . '/block.json';
     $blockClassPath = $blockPath . '/' . $args[0] . '.php';
 
@@ -54,9 +54,11 @@ class Cli
 
     if (!file_exists($blockTemplatePath)) {
       $template = <<<EOT
-      <div class="block">
-        <h1>Block</h1>
-      </div>
+        <section class="{{ classes.block.name }} {{ classes.block.spacing }}">
+          <div class="container ">
+            <InnerBlocks className="prose {{ classes.prose.color }} max-w-none flex flex-wrap justify-center -mx-4" allowedBlocks="{{ allowedBlocks | wp_json_encode }}" />
+          </div>
+        </section>
       EOT;
 
       file_put_contents($blockTemplatePath, $template);
