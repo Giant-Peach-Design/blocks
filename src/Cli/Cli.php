@@ -107,10 +107,7 @@ class Cli
       class $className extends Block implements BlockInterface
       {
       
-        public static function getBlockName(): string
-        {
-          return '$blockName';
-        }
+        public static string \$blockName = '$blockName';
 
         $displayFunc
       }
