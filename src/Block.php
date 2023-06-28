@@ -10,11 +10,35 @@ class Block implements BlockInterface
   static $blockName = 'giantpeach/block';
   protected $isAdmin = false;
 
+  /**
+   * Array of classes that can be added to the block
+   * @var array
+   */
+  public array $classes;
+
   public function __construct()
   {
     if (is_admin()) {
       $this->isAdmin = true;
     }
+
+    $this->classes = $this->getClasses();
+  }
+
+  /**
+   * Populate the classes array with classes that can be added to the block
+   *
+   * @return array
+   */
+  public function getClasses(): array
+  {
+    $classes = [];
+
+    if (get_field('colour')) {
+      $classes['prose']['color'] = 'prose-' . get_field('colour');
+    }
+
+    return $classes;
   }
 
   public function render(): void
