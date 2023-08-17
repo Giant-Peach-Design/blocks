@@ -1,5 +1,6 @@
 {
   "name": "giantpeach/blocks",
+  "license": "MIT",
   "repositories": [
     {
       "type": "path",
