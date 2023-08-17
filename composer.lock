@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edf41581696edf0bb48db658c4975bb3",
+    "content-hash": "b7dcc90fefdf03f7692e921dd5eeb68a",
     "packages": [
         {
             "name": "giantpeach/twiglet",
-            "version": "dev-main",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Giant-Peach-Design/twiglet.git",
+                "reference": "d02e09b80fb0580bfeec0a2ad38536810423c3c6"
+            },
             "dist": {
-                "type": "path",
-                "url": "../twiglet",
-                "reference": "3db2239070edfac485e83386c978750894c61055"
+                "type": "zip",
+                "url": "https://api.github.com/repos/Giant-Peach-Design/twiglet/zipball/d02e09b80fb0580bfeec0a2ad38536810423c3c6",
+                "reference": "d02e09b80fb0580bfeec0a2ad38536810423c3c6",
+                "shasum": ""
             },
             "require": {
                 "oscarotero/env": "^2.1",
@@ -25,15 +31,17 @@
                     "Giantpeach\\Schnapps\\Twiglet\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "authors": [
                 {
                     "name": "Giant Peach"
                 }
             ],
-            "transport-options": {
-                "symlink": false,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/Giant-Peach-Design/twiglet/issues",
+                "source": "https://github.com/Giant-Peach-Design/twiglet/tree/v1.0.0"
+            },
+            "time": "2023-08-17T08:47:58+00:00"
         },
         {
             "name": "graham-campbell/result-type",
@@ -477,16 +485,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.6.1",
+            "version": "v3.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "7e7d5839d4bec168dfeef0ac66d5c5a2edbabffd"
+                "reference": "5cf942bbab3df42afa918caeba947f1b690af64b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/7e7d5839d4bec168dfeef0ac66d5c5a2edbabffd",
-                "reference": "7e7d5839d4bec168dfeef0ac66d5c5a2edbabffd",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/5cf942bbab3df42afa918caeba947f1b690af64b",
+                "reference": "5cf942bbab3df42afa918caeba947f1b690af64b",
                 "shasum": ""
             },
             "require": {
@@ -532,7 +540,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.6.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.7.0"
             },
             "funding": [
                 {
@@ -544,7 +552,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-08T12:52:13+00:00"
+            "time": "2023-07-26T07:16:09+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -634,9 +642,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "giantpeach/twiglet": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

@@ -1,15 +1,6 @@
 {
   "name": "giantpeach/blocks",
   "license": "MIT",
-  "repositories": [
-    {
-      "type": "path",
-      "url": "../*",
-      "options": {
-        "symlink": false
-      }
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Giantpeach\\Schnapps\\Blocks\\": "src"
@@ -21,6 +12,6 @@
     }
   ],
   "require": {
-    "giantpeach/twiglet": "@dev"
+    "giantpeach/twiglet": "^1.0"
   }
 }
