@@ -121,7 +121,7 @@ class Cli
     }
 
     \WP_CLI::success('Block created');
-    \WP_CLI::success('Don\'t forget to register the block in src/Schnapps.php');
+    \WP_CLI::success('Don\'t forget to register the block in src/Blocks/Blocks.php');
   }
 
   public function hello()
