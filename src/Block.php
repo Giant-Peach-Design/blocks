@@ -45,7 +45,7 @@ class Block implements BlockInterface
     $classes = [];
 
     $classes['prose'] = [
-      'color' => 'prose-' . get_field('colour') ?? 'default',
+      'color' => 'prose-' . get_field('colour') ?? 'inherit',
       'size' => 'prose-' . get_field('size') ?? 'base'
     ];
 
