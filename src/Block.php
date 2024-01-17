@@ -55,12 +55,13 @@ class Block implements BlockInterface
     return $classes;
   }
 
-  public function render(): void
+  public function render(): string
   {
     if (file_exists(self::getDir() . '/view.twig')) {
-      Twiglet::getInstance()->display('/src/Blocks/' . self::getBlockNameFromDir() . '/view.twig', get_object_vars($this));
+      echo $template = Twiglet::getInstance()->render('/src/Blocks/' . self::getBlockNameFromDir() . '/view.twig', get_object_vars($this));
+      return $template;
     } else {
-      include self::getDir() . '/template.php';
+      return include self::getDir() . '/template.php';
     }
   }
 
