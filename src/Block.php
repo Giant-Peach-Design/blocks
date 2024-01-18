@@ -26,6 +26,13 @@ class Block implements BlockInterface
    */
   public array $classes;
 
+  /**
+   * Array of native Wordpress block HTML attributes. Can be added to the block
+   * @var array
+   */
+  protected array $blockAttributes;
+
+
   public function __construct()
   {
     if (is_admin()) {
@@ -33,6 +40,7 @@ class Block implements BlockInterface
     }
 
     $this->classes = $this->getClasses();
+    $this->blockAttributes = $this->getWpAttributes();
   }
 
   /**
@@ -79,6 +87,15 @@ class Block implements BlockInterface
 
   public static function display(): void
   {
+  }
+
+  private static function getWpAttributes(): array
+  {
+    $attrString = get_block_wrapper_attributes();
+    $attrArray = current((array) new \SimpleXMLElement("<element " . $attrString. " />"));
+    $attrArray['raw'] = $attrString;
+
+    return $attrArray;
   }
 
   private static function getBlockNameFromDir(): string
