@@ -10,6 +10,9 @@ class Block implements BlockInterface
   public static string $blockName = 'giantpeach/block';
   protected $isAdmin = false;
 
+  public string $id;
+  public Style $style;
+
   /**
    * Block spacing classes, can be overwritten at the block level
    */
@@ -27,6 +30,27 @@ class Block implements BlockInterface
   public array $classes;
 
   /**
+   * Array of styles that can be added to the block
+   * 
+   * The array is structured as follows:
+   * 
+   * [
+   *  'body' => [
+   *   'color' => 'red',
+   *   'font-size' => '16px'
+   *  ],
+   *  '@media (min-width: 768px)' => [
+   *   'body' => [
+   *    'color' => 'blue',
+   *    'font-size' => '18px'
+   *   ]
+   *  ]
+   * ]
+   * 
+   * @var array
+   */
+
+  /**
    * Array of native Wordpress block HTML attributes. Can be added to the block
    * @var array
    */
@@ -35,6 +59,8 @@ class Block implements BlockInterface
 
   public function __construct()
   {
+    $this->id = uniqid();
+    $this->style = new Style($this->id);
     if (is_admin()) {
       $this->isAdmin = true;
     }
@@ -42,6 +68,7 @@ class Block implements BlockInterface
     $this->classes = $this->getClasses();
     $this->blockAttributes = $this->getWpAttributes();
   }
+
 
   /**
    * Populate the classes array with classes that can be added to the block
@@ -65,6 +92,12 @@ class Block implements BlockInterface
 
   public function render(): string
   {
+    // Render the block styles, checks if the property has been initialised first
+    $rp = new \ReflectionProperty($this, 'style');
+    if ($rp->isInitialized($this)) {
+      $this->style->render();
+    }
+
     if (file_exists(self::getDir() . '/view.twig')) {
       echo $template = Twiglet::getInstance()->render('/src/Blocks/' . self::getBlockNameFromDir() . '/view.twig', get_object_vars($this));
       return $template;
@@ -92,7 +125,7 @@ class Block implements BlockInterface
   private static function getWpAttributes(): array
   {
     $attrString = get_block_wrapper_attributes();
-    $attrArray = current((array) new \SimpleXMLElement("<element " . $attrString. " />"));
+    $attrArray = current((array) new \SimpleXMLElement("<element " . $attrString . " />"));
     $attrArray['raw'] = $attrString;
 
     return $attrArray;
