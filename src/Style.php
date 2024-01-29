@@ -90,6 +90,10 @@ class Style
    */
   protected function getWrapperStyleAttribute(): array
   {
+    if (is_admin()) {
+      return [];
+    }
+
     $attributes = get_block_wrapper_attributes();
     $attrArray = current((array) new \SimpleXMLElement("<element " . $attributes . " />"));
     if (isset($attrArray['style'])) {
