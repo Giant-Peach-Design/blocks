@@ -109,6 +109,10 @@ class Cli
       
         public static string \$blockName = '$blockName';
 
+        public function __construct() {
+          parent::__construct();
+        }
+
         $displayFunc
       }
       EOT;
