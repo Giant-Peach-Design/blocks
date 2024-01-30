@@ -9,9 +9,11 @@ class Block implements BlockInterface
 {
   public static string $blockName = 'giantpeach/block';
   protected $isAdmin = false;
+  protected Classes $_wrapperClasses;
 
   public string $id;
   public Style $style;
+  public string $wrapperClass = '';
 
   /**
    * Block spacing classes, can be overwritten at the block level
@@ -30,37 +32,17 @@ class Block implements BlockInterface
   public array $classes;
 
   /**
-   * Array of styles that can be added to the block
-   * 
-   * The array is structured as follows:
-   * 
-   * [
-   *  'body' => [
-   *   'color' => 'red',
-   *   'font-size' => '16px'
-   *  ],
-   *  '@media (min-width: 768px)' => [
-   *   'body' => [
-   *    'color' => 'blue',
-   *    'font-size' => '18px'
-   *   ]
-   *  ]
-   * ]
-   * 
-   * @var array
-   */
-
-  /**
    * Array of native Wordpress block HTML attributes. Can be added to the block
    * @var array
    */
   protected array $blockAttributes;
 
-
   public function __construct()
   {
     $this->id = uniqid();
     $this->style = new Style($this->id);
+    $this->_wrapperClasses = new Classes();
+
     if (is_admin()) {
       $this->isAdmin = true;
     }
@@ -87,6 +69,19 @@ class Block implements BlockInterface
     $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
     $classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
 
+
+    if (get_field('colour')) {
+      $this->_wrapperClasses->add('prose-' . get_field('colour'));
+    }
+
+    if (get_field('size')) {
+      $this->_wrapperClasses->add('prose-' . get_field('size'));
+    }
+
+    if (get_field('block_spacing')) {
+      $this->_wrapperClasses->add($this->blockSpacing[get_field('block_spacing') ?? 'default']);
+    }
+
     return $classes;
   }
 
@@ -96,6 +91,12 @@ class Block implements BlockInterface
     $rp = new \ReflectionProperty($this, 'style');
     if ($rp->isInitialized($this)) {
       $this->style->render();
+    }
+
+    // Generate the wrapper classes string, checks if the property has been initialised first
+    $rp = new \ReflectionProperty($this, '_wrapperClasses');
+    if ($rp->isInitialized($this)) {
+      $this->wrapperClass = $this->_wrapperClasses->raw();
     }
 
     if (file_exists(self::getDir() . '/view.twig')) {
