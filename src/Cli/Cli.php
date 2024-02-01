@@ -54,7 +54,7 @@ class Cli
 
     if (!file_exists($blockTemplatePath)) {
       $template = <<<EOT
-        <section class="{{ classes.block.name }} {{ classes.block.spacing }}">
+        <section class="{{ wrapperClass }}">
           <div class="container ">
             <InnerBlocks className="prose {{ classes.prose.color }} max-w-none flex flex-wrap justify-center -mx-4" allowedBlocks="{{ allowedBlocks | wp_json_encode }}" />
           </div>

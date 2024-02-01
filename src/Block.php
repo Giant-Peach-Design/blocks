@@ -98,6 +98,8 @@ class Block implements BlockInterface
     $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
     $classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
 
+    $this->_wrapperClasses->add('block-' . $this->id);
+    $this->_wrapperClasses->add(preg_replace('/[\W\s\/]+/', '-', self::getBlockName()));
 
     if (get_field('colour')) {
       $this->_wrapperClasses->add('prose-' . get_field('colour'));
