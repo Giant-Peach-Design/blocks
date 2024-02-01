@@ -13,6 +13,11 @@ class Classes implements Countable
     return count($this->classes);
   }
 
+  public function __toString(): string
+  {
+    return $this->raw();
+  }
+
   public function __construct(array|string $classes = [])
   {
     if (is_string($classes)) {
