@@ -7,12 +7,48 @@ use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 class Block implements BlockInterface
 {
-  public static string $blockName = 'giantpeach/block';
+  /**
+   * Determines whether block is being view in admin or front end.
+   *
+   * @var bool
+   */
   protected $isAdmin = false;
+
+  /**
+   * @var Classes $_wrapperClasses The wrapper classes for the block.
+   */
   protected Classes $_wrapperClasses;
 
+  /**
+   * Array of native Wordpress block HTML attributes. Can be added to the block
+   * @var array
+   */
+  protected array $blockAttributes;
+
+  /**
+   * The name of the block.
+   *
+   * @var string
+   */
+  public static string $blockName = 'giantpeach/block';
+
+  /**
+   * Unique block ID
+   *
+   * @var string $id The ID of the block.
+   */
   public string $id;
+
+  /**
+   * @var Style $style The style of the block.
+   */
   public Style $style;
+
+  /**
+   * The wrapper class for the block.
+   *
+   * @var string
+   */
   public string $wrapperClass = '';
 
   /**
@@ -31,12 +67,6 @@ class Block implements BlockInterface
    */
   public array $classes;
 
-  /**
-   * Array of native Wordpress block HTML attributes. Can be added to the block
-   * @var array
-   */
-  protected array $blockAttributes;
-
   public function __construct()
   {
     $this->id = uniqid();
@@ -50,7 +80,6 @@ class Block implements BlockInterface
     $this->classes = $this->getClasses();
     $this->blockAttributes = $this->getWpAttributes();
   }
-
 
   /**
    * Populate the classes array with classes that can be added to the block
@@ -85,6 +114,11 @@ class Block implements BlockInterface
     return $classes;
   }
 
+  /**
+   * Renders the block.
+   *
+   * @return string The rendered block.
+   */
   public function render(): string
   {
     // Render the block styles, checks if the property has been initialised first
@@ -107,6 +141,11 @@ class Block implements BlockInterface
     }
   }
 
+  /**
+   * Returns the name of the block.
+   *
+   * @return string The name of the block.
+   */
   public static function getBlockName(): string
   {
     $reflector = new \ReflectionClass(get_called_class());
@@ -114,6 +153,11 @@ class Block implements BlockInterface
     return $blockName;
   }
 
+  /**
+   * Registers the block.
+   *
+   * @return void
+   */
   public static function registerBlock(): void
   {
     register_block_type(self::getDir() . '/block.json');
@@ -123,6 +167,11 @@ class Block implements BlockInterface
   {
   }
 
+  /**
+   * Retrieves the WordPress attributes for the block.
+   *
+   * @return array The WordPress attributes.
+   */
   private static function getWpAttributes(): array
   {
     $attrString = get_block_wrapper_attributes();
@@ -132,12 +181,22 @@ class Block implements BlockInterface
     return $attrArray;
   }
 
+  /**
+   * Retrieves the block name from the directory.
+   *
+   * @return string The block name.
+   */
   private static function getBlockNameFromDir(): string
   {
     $reflector = new \ReflectionClass(get_called_class());
     return $reflector->getShortName();
   }
 
+  /**
+   * Returns the directory path.
+   *
+   * @return string The directory path.
+   */
   private static function getDir(): string
   {
     $reflector = new \ReflectionClass(get_called_class());
