@@ -8,6 +8,13 @@ class Blocks
 {
   public function __construct()
   {
+    if (!class_exists('ACF')) {
+      add_action("admin_notices", function () {
+        echo '<div class="notice notice-error"><p>Advanced Custom Fields is required for Schnapps.</p></div>';
+      });
+      error_log("Warning: Advanced Custom Fields is required for Schnapps.",);
+    }
+
     new Cli();
 
     $this->registerTraits();
