@@ -15,11 +15,6 @@ class Block implements BlockInterface
   protected $isAdmin = false;
 
   /**
-   * @var Classes $_wrapperClasses The wrapper classes for the block.
-   */
-  protected Classes $_wrapperClasses;
-
-  /**
    * Array of native Wordpress block HTML attributes. Can be added to the block
    * @var array
    */
@@ -47,9 +42,9 @@ class Block implements BlockInterface
   /**
    * The wrapper class for the block.
    *
-   * @var string
+   * @var Classes
    */
-  public string $wrapperClass = '';
+  public Classes $wrapperClass;
 
   /**
    * Block spacing classes, can be overwritten at the block level
@@ -63,6 +58,10 @@ class Block implements BlockInterface
 
   /**
    * Array of classes that can be added to the block
+   * 
+   * @deprecated deprecated since v1.0.9. Use $wrapperClass, the Classes class 
+   * or the various Traits (e.g. Prose) instead.
+   * 
    * @var array
    */
   public array $classes;
@@ -71,7 +70,7 @@ class Block implements BlockInterface
   {
     $this->id = uniqid();
     $this->style = new Style($this->id);
-    $this->_wrapperClasses = new Classes();
+    $this->wrapperClass = new Classes();
 
     if (is_admin()) {
       $this->isAdmin = true;
@@ -79,6 +78,16 @@ class Block implements BlockInterface
 
     $this->classes = $this->getClasses();
     $this->blockAttributes = $this->getWpAttributes();
+
+    if (in_array('Giantpeach\Schnapps\Blocks\Traits\Prose', class_uses($this))) {
+      // if the block uses the Prose trait, call the getProseClasses method
+      $this->getProseClasses();
+    }
+
+    if (in_array('Giantpeach\Schnapps\Blocks\Traits\Spacing', class_uses($this))) {
+      // if the block uses the Spacing trait, call the getSpacingClasses method
+      $this->getSpacingClasses();
+    }
   }
 
   /**
@@ -90,28 +99,15 @@ class Block implements BlockInterface
   {
     $classes = [];
 
-    $classes['prose'] = [
-      'color' => 'prose-' . get_field('colour') ?? 'inherit',
-      'size' => 'prose-' . get_field('size') ?? 'base'
-    ];
-
     $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
-    $classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
+    //$classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
 
-    $this->_wrapperClasses->add('block-' . $this->id);
-    $this->_wrapperClasses->add(preg_replace('/[\W\s\/]+/', '-', self::getBlockName()));
+    $this->wrapperClass->add('block-' . $this->id);
+    $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', self::getBlockName()));
 
-    if (get_field('colour')) {
-      $this->_wrapperClasses->add('prose-' . get_field('colour'));
-    }
-
-    if (get_field('size')) {
-      $this->_wrapperClasses->add('prose-' . get_field('size'));
-    }
-
-    if (get_field('block_spacing')) {
-      $this->_wrapperClasses->add($this->blockSpacing[get_field('block_spacing') ?? 'default']);
-    }
+    //if (get_field('block_spacing')) {
+    //  $this->wrapperClass->add($this->blockSpacing[get_field('block_spacing') ?? 'default']);
+    //}
 
     return $classes;
   }
@@ -130,9 +126,9 @@ class Block implements BlockInterface
     }
 
     // Generate the wrapper classes string, checks if the property has been initialised first
-    $rp = new \ReflectionProperty($this, '_wrapperClasses');
+    $rp = new \ReflectionProperty($this, 'wrapperClass');
     if ($rp->isInitialized($this)) {
-      $this->wrapperClass = $this->_wrapperClasses->raw();
+      //$this->wrapperClass = $this->_wrapperClasses->raw();
     }
 
     if (file_exists(self::getDir() . '/view.twig')) {
