@@ -16,6 +16,11 @@ class Blocks
   protected function registerTraits()
   {
     $reflection = new \ReflectionClass($this);
+
+    if (!$reflection->hasProperty("blocks")) {
+      return;
+    }
+
     $props = $reflection->getProperty("blocks");
 
     if ($props->isInitialized($this)) {
