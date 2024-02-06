@@ -13,6 +13,13 @@ class Cli
   public function registerCommands()
   {
     \WP_CLI::add_command('hello', [$this, 'hello']);
+    /**
+     * Register the create-block command
+     * 
+     * Example usage:
+     * wp create-block my-block - Create a new block
+     * wp create-block my-block --prose --spacing - Create a new block with prose and spacing options
+     */
     \WP_CLI::add_command('create-block', [$this, 'createBlock']);
   }
 
@@ -30,11 +37,37 @@ class Cli
     $blockName = 'giantpeach/' . $blockName;
     $className = ucfirst($args[0]);
     $variableName = "$" . lcfirst($args[0]);
+    
+    $useProse = false;
+    $useSpacing = false;
+    $traits = [];
+    $use = [
+      "use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;",
+      "use Giantpeach\Schnapps\Blocks\Block;"
+    ];
+
+    if (isset($assocArgs['prose'])) {
+      $useProse = true;
+      $traits[] = 'Prose';
+      $use[] = "use Giantpeach\Schnapps\Blocks\Traits\Prose;";
+    }
+
+    if (isset($assocArgs['spacing'])) {
+      $useSpacing = true;
+      $traits[] = 'Spacing';
+      $use[] = "use Giantpeach\Schnapps\Blocks\Traits\Spacing;";
+    }
 
     $blockPath = get_template_directory() . '/src/Blocks/' . $args[0];
     $blockTemplatePath = $blockPath . '/view.twig';
     $blockJsonPath = $blockPath . '/block.json';
     $blockClassPath = $blockPath . '/' . $args[0] . '.php';
+
+    $use = array_unique($use);
+    $use = implode("\n", $use);
+
+    $traits = array_unique($traits);
+    $traits = "use " . implode(", ", $traits) . ";";
 
     $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\%s\\\%s::display", $className, $className);
 
@@ -101,11 +134,11 @@ class Cli
       
       namespace Giantpeach\Schnapps\Theme\Blocks\\$className;
       
-      use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;
-      use Giantpeach\Schnapps\Blocks\Block;
+      $use
 
       class $className extends Block implements BlockInterface
       {
+        $traits
       
         public static string \$blockName = '$blockName';
 
