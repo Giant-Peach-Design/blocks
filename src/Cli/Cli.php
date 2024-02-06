@@ -66,16 +66,20 @@ class Cli
     $use = array_unique($use);
     $use = implode("\n", $use);
 
-    $traits = array_unique($traits);
-    $traits = "use " . implode(", ", $traits) . ";";
+    if (count($traits) > 0) {
+      $traits = array_unique($traits);
+      $traits = "use " . implode(", ", $traits) . ";";
+    } else {
+      $traits = "";
+    }
 
     $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\%s\\\%s::display", $className, $className);
 
     $displayFunc = sprintf(
       "public static function display(): void {
-        %s = new %s();
-        %s->render();
-      }",
+    %s = new %s();
+    %s->render();
+  }",
       $variableName,
       $className,
       $variableName
