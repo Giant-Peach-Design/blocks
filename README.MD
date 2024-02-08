@@ -1,6 +1,7 @@
 # giantpeach/blocks
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+![Schnapps](https://img.shields.io/badge/Peach-Schnapps-%23aea0fd?style=for-the-badge)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
 ## Description
 
