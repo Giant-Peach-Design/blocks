@@ -68,7 +68,8 @@ class Cli
 
     if (count($traits) > 0) {
       $traits = array_unique($traits);
-      $traits = "use " . implode(", ", $traits) . ";";
+      $traits = "use " . implode(", ", $traits) . ";
+      ";
     } else {
       $traits = "";
     }
@@ -91,11 +92,15 @@ class Cli
 
     if (!file_exists($blockTemplatePath)) {
       $template = <<<EOT
-        <section class="{{ wrapperClass }}">
-          <div class="container ">
-            <InnerBlocks className="prose {{ classes.prose.color }} max-w-none flex flex-wrap justify-center -mx-4" allowedBlocks="{{ allowedBlocks | wp_json_encode }}" />
-          </div>
-        </section>
+      <section class="{{ wrapperClass }}">
+        <div class="container">
+          <InnerBlocks 
+            className="prose {{ classes.prose.color }} max-w-none flex flex-wrap justify-center -mx-4" 
+            allowedBlocks="{{ allowedBlocks | wp_json_encode }}"
+            template="{{ template | wp_json_encode }}" 
+          />
+        </div>
+      </section>
       EOT;
 
       file_put_contents($blockTemplatePath, $template);
@@ -143,7 +148,6 @@ class Cli
       class $className extends Block implements BlockInterface
       {
         $traits
-      
         public static string \$blockName = '$blockName';
 
         public function __construct() {
