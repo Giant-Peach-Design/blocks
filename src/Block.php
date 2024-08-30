@@ -161,6 +161,10 @@ class Block implements BlockInterface
     register_block_type(self::getDir() . '/block.json');
   }
 
+  public static function registerFields(): void {
+    Fields::load(self::getDir());
+  }
+
   public static function display(): void
   {
   }
