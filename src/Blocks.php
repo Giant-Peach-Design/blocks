@@ -342,4 +342,29 @@ class Blocks
       ]);
     });
   }
+
+  public static function renderBlock(
+    $block,
+    $content,
+    $is_preview,
+    $post_id,
+    $wp_block,
+    $context,
+  ) {
+    $path = $block["path"];
+
+    //get the block name from the last part of path
+    $blockName = explode("/", $path);
+    $blockName = end($blockName);
+
+    //get the block class
+    $blockClass =
+      "Giantpeach\\Schnapps\\Theme\\Blocks\\" . $blockName . "\\" . $blockName;
+
+    //check if the class exists
+    if (class_exists($blockClass)) {
+      //create a new instance of the block
+      $blockInstance = new $blockClass($block);
+    }
+  }
 }
