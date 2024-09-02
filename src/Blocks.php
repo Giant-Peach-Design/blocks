@@ -6,6 +6,8 @@ use Giantpeach\Schnapps\Blocks\Cli\Cli;
 
 abstract class Blocks
 {
+  protected $blocks = [];
+
   public function __construct()
   {
     if (!class_exists("ACF")) {
@@ -17,7 +19,36 @@ abstract class Blocks
 
     new Cli();
 
+    add_action('init', [$this, 'registerDiscoveredBlocks'])
+
     $this->registerTraits();
+  }
+
+  /**
+   * Automatically discover / register blocks.
+   * 
+   * @since 2.0.0
+   *
+   * @return void
+   */
+  public function registerDiscoveredBlocks(): void 
+  {
+    $blocks = $this->blocks;
+
+    if (empty($blocks)) {
+      return;
+    }
+
+    foreach ($blocks as $block) {
+      // get block directory
+      $blockDir = dirname($block);
+
+      // check if block.json exists
+      if (file_exists($blockDir . '/block.json')) {
+        $blockJson = $blockDir . '/block.json';
+        register_block_type($blockJson);
+      }
+    }
   }
 
   /**
