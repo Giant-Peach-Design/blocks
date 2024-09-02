@@ -68,7 +68,7 @@ abstract class Block {
 
   public static function getBlockName(): string {
     $reflector = new \ReflectionClass(get_called_class());
-    $blockName = $reflector->getStaticPropertyValue('blockName');
+    $blockName = $reflector->getProperty('blockName');
     return $blockName;
   }
 }
