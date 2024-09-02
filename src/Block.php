@@ -65,4 +65,10 @@ abstract class Block {
     $dir = dirname($reflector->getFileName());
     Fields::load($dir);
   }
+
+  public static function getBlockName(): string {
+    $reflector = new \ReflectionClass(get_called_class());
+    $blockName = $reflector->getStaticPropertyValue('blockName');
+    return $blockName;
+  }
 }
