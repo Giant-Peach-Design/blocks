@@ -19,7 +19,7 @@ abstract class Blocks
 
     new Cli();
 
-    add_action('init', [$this, 'registerDiscoveredBlocks'])
+    add_action('init', [$this, 'registerDiscoveredBlocks']);
 
     $this->registerTraits();
   }
