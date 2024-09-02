@@ -59,4 +59,10 @@ abstract class Block {
 
     return $attrArray;
   }
+
+  public static function registerFields(): void {
+    $reflector = new \ReflectionClass(get_called_class());
+    $dir = dirname($reflector->getFileName());
+    Fields::load($dir);
+  }
 }
