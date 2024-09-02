@@ -40,8 +40,8 @@ abstract class Blocks
     }
 
     foreach ($blocks as $block) {
-      // get block directory
-      $blockDir = dirname($block);
+      // get block directory from block class name
+      $blockDir = dirname((new \ReflectionClass($block))->getFileName());
 
       // check if block.json exists
       if (file_exists($blockDir . '/block.json')) {
