@@ -4,7 +4,7 @@ namespace Giantpeach\Schnapps\Blocks;
 
 use Giantpeach\Schnapps\Blocks\Cli\Cli;
 
-class Blocks
+abstract class Blocks
 {
   public function __construct()
   {
@@ -20,8 +20,19 @@ class Blocks
     $this->registerTraits();
   }
 
+  /**
+   * registerTraits
+   * @deprecated version 2.0.0
+   *
+   * @return void
+   */
   protected function registerTraits()
   {
+    trigger_error(
+      "registerTraits is deprecated and will be removed in a future version.",
+      E_USER_DEPRECATED,
+    );
+
     $reflection = new \ReflectionClass($this);
 
     if (!$reflection->hasProperty("blocks")) {
@@ -71,12 +82,17 @@ class Blocks
 
   /**
    * Registers Prose Blocks.
+   * @deprecated version 2.0.0
    *
    * @param array $blocks The array of blocks to register.
    * @return void
    */
   protected function registerProseBlocks(array $blocks): void
   {
+    trigger_error(
+      "registerProseBlocks is deprecated and will be removed in a future version.",
+      E_USER_DEPRECATED,
+    );
     // Check if the blocks array is empty
     if (empty($blocks)) {
       return;
@@ -243,12 +259,17 @@ class Blocks
 
   /**
    * Registers spacing blocks.
+   * @deprecated version 2.0.0
    *
    * @param array $blocks The array of blocks to register.
    * @return void
    */
   protected function registerSpacingBlocks(array $blocks): void
   {
+    trigger_error(
+      "registerSpacingBlocks is deprecated and will be removed in a future version.",
+      E_USER_DEPRECATED,
+    );
     // Check if the blocks array is empty
     if (empty($blocks)) {
       return;
@@ -343,6 +364,13 @@ class Blocks
     });
   }
 
+  /**
+   * Generic block renderer
+   * 
+   * @since 2.0.0
+   *
+   * @return void
+   */
   public static function renderBlock(
     $block,
     $content,
