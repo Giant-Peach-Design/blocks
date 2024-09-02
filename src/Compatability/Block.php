@@ -2,7 +2,10 @@
 
 namespace Giantpeach\Schnapps\Blocks\Compatability;
 
+use Giantpeach\Schnapps\Blocks\Classes;
+use Giantpeach\Schnapps\Blocks\Fields;
 use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;
+use Giantpeach\Schnapps\Blocks\Style;
 use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 /**
