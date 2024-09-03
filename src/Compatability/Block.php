@@ -10,6 +10,13 @@ use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 /**
  * @deprecated version 2.0.0
+ * 
+ * The Block class is the base class for all blocks. It provides a number of
+ * methods that can be used to render the block, register the block and get the
+ * block name.
+ * 
+ * This class is deprecated but will remain in the codebase for the foreseeable
+ * future. It is recommended that you use the new Block class instead.
  */
 class Block implements BlockInterface
 {
@@ -106,7 +113,7 @@ class Block implements BlockInterface
     $classes = [];
 
     $classes['block']['name'] = preg_replace('/[\W\s\/]+/', '-', self::getBlockName());
-    //$classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
+    $classes['block']['spacing'] = $this->blockSpacing[get_field('block_spacing') ?? 'default'];
 
     $this->wrapperClass->add('block-' . $this->id);
     $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', self::getBlockName()));
