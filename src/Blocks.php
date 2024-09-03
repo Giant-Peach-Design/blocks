@@ -59,10 +59,6 @@ abstract class Blocks
    */
   protected function registerTraits()
   {
-    trigger_error(
-      "registerTraits is deprecated and will be removed in a future version.",
-      E_USER_DEPRECATED,
-    );
 
     $reflection = new \ReflectionClass($this);
 
@@ -120,10 +116,6 @@ abstract class Blocks
    */
   protected function registerProseBlocks(array $blocks): void
   {
-    trigger_error(
-      "registerProseBlocks is deprecated and will be removed in a future version.",
-      E_USER_DEPRECATED,
-    );
     // Check if the blocks array is empty
     if (empty($blocks)) {
       return;
@@ -297,10 +289,6 @@ abstract class Blocks
    */
   protected function registerSpacingBlocks(array $blocks): void
   {
-    trigger_error(
-      "registerSpacingBlocks is deprecated and will be removed in a future version.",
-      E_USER_DEPRECATED,
-    );
     // Check if the blocks array is empty
     if (empty($blocks)) {
       return;
