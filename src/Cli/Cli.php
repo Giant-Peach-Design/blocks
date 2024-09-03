@@ -18,7 +18,6 @@ class Cli
      * 
      * Example usage:
      * wp create-block my-block - Create a new block
-     * wp create-block my-block --prose --spacing - Create a new block with prose and spacing options
      */
     \WP_CLI::add_command('create-block', [$this, 'createBlock']);
   }
@@ -37,26 +36,11 @@ class Cli
     $blockName = 'giantpeach/' . $blockName;
     $className = ucfirst($args[0]);
     $variableName = "$" . lcfirst($args[0]);
-    
-    $useProse = false;
-    $useSpacing = false;
+
     $traits = [];
     $use = [
-      "use Giantpeach\Schnapps\Blocks\Interfaces\BlockInterface;",
       "use Giantpeach\Schnapps\Blocks\Block;"
     ];
-
-    if (isset($assocArgs['prose'])) {
-      $useProse = true;
-      $traits[] = 'Prose';
-      $use[] = "use Giantpeach\Schnapps\Blocks\Traits\Prose;";
-    }
-
-    if (isset($assocArgs['spacing'])) {
-      $useSpacing = true;
-      $traits[] = 'Spacing';
-      $use[] = "use Giantpeach\Schnapps\Blocks\Traits\Spacing;";
-    }
 
     $blockPath = get_template_directory() . '/src/Blocks/' . $args[0];
     $blockTemplatePath = $blockPath . '/view.twig';
@@ -74,17 +58,7 @@ class Cli
       $traits = "";
     }
 
-    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\%s\\\%s::display", $className, $className);
-
-    $displayFunc = sprintf(
-      "public static function display(): void {
-    %s = new %s();
-    %s->render();
-  }",
-      $variableName,
-      $className,
-      $variableName
-    );
+    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\Blocks::renderBlocks");
 
     if (!file_exists($blockPath)) {
       mkdir($blockPath);
@@ -93,9 +67,9 @@ class Cli
     if (!file_exists($blockTemplatePath)) {
       $template = <<<EOT
       <section class="{{ wrapperClass }}">
-        <div class="container">
+        <div class="content">
           <InnerBlocks 
-            className="prose {{ classes.prose.color }} max-w-none flex flex-wrap justify-center -mx-4" 
+            className="" 
             allowedBlocks="{{ allowedBlocks | wp_json_encode }}"
             template="{{ template | wp_json_encode }}" 
           />
@@ -145,16 +119,11 @@ class Cli
       
       $use
 
-      class $className extends Block implements BlockInterface
+      class $className extends Block
       {
-        $traits
-        public static string \$blockName = '$blockName';
-
-        public function __construct() {
-          parent::__construct();
+        public function mount() {
+          // it's all yours
         }
-
-        $displayFunc
       }
       EOT;
 
@@ -166,7 +135,7 @@ class Cli
     }
 
     \WP_CLI::success('Block created');
-    \WP_CLI::success('Don\'t forget to register the block in src/Blocks/Blocks.php');
+    //\WP_CLI::success('Don\'t forget to register the block in src/Blocks/Blocks.php');
   }
 
   public function hello()
