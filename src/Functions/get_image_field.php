@@ -1,5 +1,7 @@
 <?php
 
+// probs could move this into a separate helpers package
+
 if (!function_exists('get_image_field') && function_exists('get_field')) {
 
   /**
