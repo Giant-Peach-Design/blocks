@@ -6,6 +6,7 @@ use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 abstract class Block {
   protected bool $isAdmin = false;
+  protected array $blockData = [];
   protected array $blockAttributes;
 
   public string $blockName = 'giantpeach/block';
@@ -21,11 +22,12 @@ abstract class Block {
     }
 
     $this->blockAttributes = $this->getWpAttributes();
-    $this->mount($args[0]);
+    $this->blockData = $args[0];
+    $this->mount();
     $this->render();
   }
 
-  public function mount(array $block = []): void {}
+  public function mount(): void {}
 
   public function render(): string {
     if (file_exists($this->getDir() . '/view.twig')) {
