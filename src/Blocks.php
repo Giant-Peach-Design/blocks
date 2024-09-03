@@ -4,6 +4,7 @@ namespace Giantpeach\Schnapps\Blocks;
 
 use Giantpeach\Schnapps\Blocks\Cli\Cli;
 
+require_once __DIR__ . 'Functions/get_image_field.php';
 abstract class Blocks
 {
   protected $blocks = [];
