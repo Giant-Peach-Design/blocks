@@ -5,9 +5,15 @@ namespace Giantpeach\Schnapps\Blocks;
 use Giantpeach\Schnapps\Twiglet\Twiglet;
 
 abstract class Block {
+  protected string $twigView = 'view.twig';
+  protected string $phpView = 'template.php';
+
   protected bool $isAdmin = false;
   protected array $blockData = [];
   protected array $blockAttributes;
+
+  public Classes $wrapperClass;
+  public Style $style;
 
   public string $blockName = 'giantpeach/block';
   public string $id;
@@ -23,6 +29,14 @@ abstract class Block {
 
     $this->blockAttributes = $this->getWpAttributes();
     $this->blockData = $args[0];
+    $this->blockName = $this->blockData['name'];
+
+    $this->style = new Style($this->id);
+
+    $this->wrapperClass = new Classes();
+    $this->wrapperClass->add('block-' . $this->id);
+    $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', $this->blockName));
+
     $this->mount();
     $this->render();
   }
@@ -30,9 +44,16 @@ abstract class Block {
   public function mount(): void {}
 
   public function render(): string {
-    if (file_exists($this->getDir() . '/view.twig')) {
-      echo $template = Twiglet::getInstance()->render('/src/Blocks/' . $this->getBlockNameFromDir() . '/view.twig', get_object_vars($this));
+    $rp = new \ReflectionProperty($this, 'style');
+    if ($rp->isInitialized($this)) {
+      $this->style->render();
+    }
+
+    if (file_exists($this->getDir() . '/' . $this->twigView)) {
+      echo $template = Twiglet::getInstance()->render('/src/Blocks/' . $this->getBlockNameFromDir() . '/' . $this->twigView, get_object_vars($this));
       return $template;
+    } else {
+      return include $this->getDir() . '/' . $this->phpView;
     }
 
     return "";
