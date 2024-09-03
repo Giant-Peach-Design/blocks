@@ -21,11 +21,11 @@ abstract class Block {
     }
 
     $this->blockAttributes = $this->getWpAttributes();
-    $this->mount(...$args);
+    $this->mount($args[0]);
     $this->render();
   }
 
-  public function mount(...$args): void {}
+  public function mount(array $block = []): void {}
 
   public function render(): string {
     if (file_exists($this->getDir() . '/view.twig')) {
