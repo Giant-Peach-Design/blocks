@@ -121,7 +121,7 @@ class Cli
 
       class $className extends Block
       {
-        public function mount() {
+        public function mount(): void {
           // it's all yours
         }
       }

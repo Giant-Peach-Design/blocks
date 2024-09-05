@@ -12,6 +12,6 @@
     }
   ],
   "require": {
-    "giantpeach/twiglet": "^1.0"
+    "giantpeach/twiglet": "next"
   }
 }

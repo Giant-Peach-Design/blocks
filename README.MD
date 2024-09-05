@@ -3,6 +3,26 @@
 ![Schnapps](https://img.shields.io/badge/Peach-Schnapps-%23aea0fd?style=for-the-badge)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
+## 2.0
+
+2.0 introduces an improved Block class to make life simpler. As a result, it is not backwards compatible with blocks created using the 1.0 version of the package.
+
+Updates include:
+
+- Less boilerplate code
+  - You no longer need a `__construct()` method in your blocks, instead you can use the `mount()` method for any property assignments you need to do
+  - The `display()` method has been removed, block rendering is now all handled by the parent class
+- `get_image_field('field_name')` helper method to return an image ID from an ACF field regardless of the ACF return value
+- optional `$twigView` and `$phpView` properties to allow you to specify a different view file for your block
+
+Using the `wp create-block` command will now scaffold a block using the 2.0 version of the package, but upgrading existing blocks will require some manual changes. Fortunately, the old Block class is still available under the `Giantpeach\Schnapps\Blocks\Compatability` namespace, so you don't need to migrate all your blocks at once.
+
+To upgrade an existing block to 2.0 you will need to:
+
+- move any existing `__construct()` and `display()` code into the `mount()` method
+- remove the `display()` method
+- update the block.json acf.renderCallback to point to the new block render function: `"Giantpeach\\Schnapps\\Theme\\Blocks\\Blocks::renderBlock"`
+
 ## Description
 
 This package aims to simplify block creation and usage in Wordpress. It is designed and included as part of the Peach Schnapps Framework.

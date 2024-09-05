@@ -91,7 +91,14 @@ abstract class Block {
 
   public static function getBlockName(): string {
     $reflector = new \ReflectionClass(get_called_class());
-    $blockName = $reflector->getProperty('blockName');
-    return $blockName;
+    
+    // get directory of block
+    $dir = dirname($reflector->getFileName());
+    
+    // load json file
+    $json = file_get_contents($dir . '/block.json');
+    $data = json_decode($json, true);
+
+    return $data['name'];
   }
 }
