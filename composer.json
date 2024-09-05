@@ -12,6 +12,6 @@
     }
   ],
   "require": {
-    "giantpeach/twiglet": "next"
+    "giantpeach/twiglet": "next-dev"
   }
 }
