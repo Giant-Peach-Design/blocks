@@ -62,7 +62,10 @@ abstract class Block {
   private function initializeTraits(): void {
     $traits = class_uses($this);
     foreach ($traits as $trait) {
-      $method = 'init' . $trait;
+      $t = explode('\\', $trait);
+      
+      $method = 'init' . end($t);
+      
       if (method_exists($this, $method)) {
         $this->$method();
       }
