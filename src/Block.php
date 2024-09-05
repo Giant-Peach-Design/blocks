@@ -26,10 +26,6 @@ abstract class Block {
     if (is_admin()) {
       $this->isAdmin = true;
     }
-    
-    if (in_array('Giantpeach\Schnapps\Blocks\Traits\BlockAttributes', class_uses($this))) {
-      $this->initBlockAttributes();
-    }
 
     $this->blockData = $args[0];
     $this->blockName = $this->blockData['name'];
@@ -40,6 +36,7 @@ abstract class Block {
     $this->wrapperClass->add('block-' . $this->id);
     $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', $this->blockName));
 
+    $this->initializeTraits();
     $this->mount();
     $this->render();
   }
@@ -60,6 +57,16 @@ abstract class Block {
     }
 
     return "";
+  }
+
+  private function initializeTraits(): void {
+    $traits = class_uses($this);
+    foreach ($traits as $trait) {
+      $method = 'init' . $trait;
+      if (method_exists($this, $method)) {
+        $this->$method();
+      }
+    }
   }
 
   private function getBlockNameFromDir(): string {

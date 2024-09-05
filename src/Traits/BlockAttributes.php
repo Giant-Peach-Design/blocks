@@ -7,6 +7,7 @@ trait BlockAttributes {
 
   public function initBlockAttributes() {
     $this->blockAttributes = $this->getBlockAttributes();
+    $this->wrapperClass->add($this->blockAttributes['class']);
   }
 
   private function getBlockAttributes(): array
