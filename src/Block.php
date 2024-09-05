@@ -10,7 +10,7 @@ abstract class Block {
 
   protected bool $isAdmin = false;
   protected array $blockData = [];
-  protected array $blockAttributes;
+  //protected array $blockAttributes;
 
   public Classes $wrapperClass;
   public Style $style;
@@ -26,8 +26,11 @@ abstract class Block {
     if (is_admin()) {
       $this->isAdmin = true;
     }
+    
+    if (in_array('Giantpeach\Schnapps\Blocks\Traits\BlockAttributes', class_uses($this))) {
+      $this->initBlockAttributes();
+    }
 
-    $this->blockAttributes = $this->getWpAttributes();
     $this->blockData = $args[0];
     $this->blockName = $this->blockData['name'];
 
