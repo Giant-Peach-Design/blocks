@@ -12,6 +12,6 @@
     }
   ],
   "require": {
-    "giantpeach/twiglet": "next-dev"
+    "giantpeach/twiglet": "^1.0"
   }
 }
