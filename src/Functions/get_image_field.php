@@ -15,6 +15,10 @@ if (!function_exists('get_image_field') && function_exists('get_field')) {
   {
     $field = get_field($fieldName);
 
+    if ($field === null) {
+      return -1;
+    }
+
     if (is_array($field)) {
       return $field['ID'];
     }
