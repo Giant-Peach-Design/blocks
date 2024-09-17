@@ -58,7 +58,7 @@ class Cli
       $traits = "";
     }
 
-    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\Blocks::renderBlocks");
+    $renderCallback = sprintf("\\\Giantpeach\\\Schnapps\\\Theme\\\Blocks\\\Blocks::renderBlock");
 
     if (!file_exists($blockPath)) {
       mkdir($blockPath);
