@@ -10,7 +10,7 @@ abstract class Block {
 
   protected bool $isAdmin = false;
   protected array $blockData = [];
-  //protected array $blockAttributes;
+  protected array $blockAttributes;
 
   public Classes $wrapperClass;
   public Style $style;
@@ -31,6 +31,8 @@ abstract class Block {
     $this->blockName = $this->blockData['name'];
 
     $this->style = new Style($this->id);
+
+    $this->blockAttributes = $this->getWpAttributes();
 
     $this->wrapperClass = new Classes();
     $this->wrapperClass->add('block-' . $this->id);
@@ -94,6 +96,22 @@ abstract class Block {
     $attrArray['raw'] = $attrString;
 
     return $attrArray;
+  }
+
+  /**
+   * Retrieves the WordPress attribute for the block.
+   *
+   * @return string The WordPress attribute.
+   */
+  public function getWpAttribute($key): string
+  {
+    $attributes = $this->getWpAttributes();
+
+    if ($attributes && array_key_exists($key, $attributes)) {
+      return $attributes[$key];
+    }
+
+    return '';
   }
 
   public static function registerFields(): void {
