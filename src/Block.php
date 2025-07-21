@@ -4,132 +4,144 @@ namespace Giantpeach\Schnapps\Blocks;
 
 use Giantpeach\Schnapps\Twiglet\Twiglet;
 
-abstract class Block {
-  protected string $twigView = 'view.twig';
-  protected string $phpView = 'template.php';
+abstract class Block
+{
+    protected string $twigView = 'view.twig';
+    protected string $phpView = 'template.php';
 
-  protected bool $isAdmin = false;
-  protected array $blockData = [];
-  protected array $blockAttributes;
+    protected bool $isAdmin = false;
+    protected array $blockData = [];
+    protected array $blockAttributes;
+    protected array $data = [];
 
-  public Classes $wrapperClass;
-  public Style $style;
+    public Classes $wrapperClass;
+    public Style $style;
 
-  public string $blockName = 'giantpeach/block';
-  public string $id;
-  public array $allowedBlocks = [];
-  public array $template = [];
+    public string $blockName = 'giantpeach/block';
+    public string $id;
+    public array $allowedBlocks = [];
+    public array $template = [];
 
-  public function __construct(...$args) {
-    $this->id = uniqid();
+    public function __construct(...$args)
+    {
+        $this->id = uniqid();
 
-    if (is_admin()) {
-      $this->isAdmin = true;
+        if (is_admin()) {
+            $this->isAdmin = true;
+        }
+
+        $this->blockData = $args[0];
+        $this->blockName = $this->blockData['name'];
+
+        $fields = \get_fields();
+        $this->data = $fields ? $fields : [];
+
+        $this->style = new Style($this->id);
+
+        $this->blockAttributes = $this->getWpAttributes();
+
+        $this->wrapperClass = new Classes();
+        $this->wrapperClass->add('block-' . $this->id);
+        $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', $this->blockName));
+
+        $this->initializeTraits();
+        $this->mount();
+        $this->render();
     }
 
-    $this->blockData = $args[0];
-    $this->blockName = $this->blockData['name'];
+    public function mount(): void {}
 
-    $this->style = new Style($this->id);
+    public function render(): string
+    {
+        $rp = new \ReflectionProperty($this, 'style');
+        if ($rp->isInitialized($this)) {
+            $this->style->render();
+        }
 
-    $this->blockAttributes = $this->getWpAttributes();
+        if (file_exists($this->getDir() . '/' . $this->twigView)) {
+            echo $template = Twiglet::getInstance()->render('/src/Blocks/' . $this->getBlockNameFromDir() . '/' . $this->twigView, get_object_vars($this));
+            return $template;
+        } else {
+            return include $this->getDir() . '/' . $this->phpView;
+        }
 
-    $this->wrapperClass = new Classes();
-    $this->wrapperClass->add('block-' . $this->id);
-    $this->wrapperClass->add(preg_replace('/[\W\s\/]+/', '-', $this->blockName));
-
-    $this->initializeTraits();
-    $this->mount();
-    $this->render();
-  }
-
-  public function mount(): void {}
-
-  public function render(): string {
-    $rp = new \ReflectionProperty($this, 'style');
-    if ($rp->isInitialized($this)) {
-      $this->style->render();
+        return "";
     }
 
-    if (file_exists($this->getDir() . '/' . $this->twigView)) {
-      echo $template = Twiglet::getInstance()->render('/src/Blocks/' . $this->getBlockNameFromDir() . '/' . $this->twigView, get_object_vars($this));
-      return $template;
-    } else {
-      return include $this->getDir() . '/' . $this->phpView;
+    private function initializeTraits(): void
+    {
+        $traits = class_uses($this);
+        foreach ($traits as $trait) {
+            $t = explode('\\', $trait);
+
+            $method = 'init' . end($t);
+
+            if (method_exists($this, $method)) {
+                $this->$method();
+            }
+        }
     }
 
-    return "";
-  }
-
-  private function initializeTraits(): void {
-    $traits = class_uses($this);
-    foreach ($traits as $trait) {
-      $t = explode('\\', $trait);
-      
-      $method = 'init' . end($t);
-      
-      if (method_exists($this, $method)) {
-        $this->$method();
-      }
-    }
-  }
-
-  private function getBlockNameFromDir(): string {
-    $reflector = new \ReflectionClass(get_called_class());
-    return $reflector->getShortName();
-  }
-
-  private function getDir(): string {
-    $reflector = new \ReflectionClass(get_called_class());
-    return dirname($reflector->getFileName());
-  }
-
-  /**
-   * Retrieves the WordPress attributes for the block.
-   *
-   * @return array The WordPress attributes.
-   */
-  private function getWpAttributes(): array
-  {
-    $attrString = get_block_wrapper_attributes();
-    $attrArray = current((array) new \SimpleXMLElement("<element " . $attrString . " />"));
-    $attrArray['raw'] = $attrString;
-
-    return $attrArray;
-  }
-
-  /**
-   * Retrieves the WordPress attribute for the block.
-   *
-   * @return string The WordPress attribute.
-   */
-  public function getWpAttribute($key): string
-  {
-    $attributes = $this->getWpAttributes();
-
-    if ($attributes && array_key_exists($key, $attributes)) {
-      return $attributes[$key];
+    private function getBlockNameFromDir(): string
+    {
+        $reflector = new \ReflectionClass(get_called_class());
+        return $reflector->getShortName();
     }
 
-    return '';
-  }
+    private function getDir(): string
+    {
+        $reflector = new \ReflectionClass(get_called_class());
+        return dirname($reflector->getFileName());
+    }
 
-  public static function registerFields(): void {
-    $reflector = new \ReflectionClass(get_called_class());
-    $dir = dirname($reflector->getFileName());
-    Fields::load($dir);
-  }
+    /**
+     * Retrieves the WordPress attributes for the block.
+     *
+     * @return array The WordPress attributes.
+     */
+    private function getWpAttributes(): array
+    {
+        $attrString = get_block_wrapper_attributes();
+        $attrArray = current((array) new \SimpleXMLElement("<element " . $attrString . " />"));
+        $attrArray['raw'] = $attrString;
 
-  public static function getBlockName(): string {
-    $reflector = new \ReflectionClass(get_called_class());
-    
-    // get directory of block
-    $dir = dirname($reflector->getFileName());
-    
-    // load json file
-    $json = file_get_contents($dir . '/block.json');
-    $data = json_decode($json, true);
+        return $attrArray;
+    }
 
-    return $data['name'];
-  }
+    /**
+     * Retrieves the WordPress attribute for the block.
+     *
+     * @return string The WordPress attribute.
+     */
+    public function getWpAttribute($key): string
+    {
+        $attributes = $this->getWpAttributes();
+
+        if ($attributes && array_key_exists($key, $attributes)) {
+            return $attributes[$key];
+        }
+
+        return '';
+    }
+
+    public static function registerFields(): void
+    {
+        $reflector = new \ReflectionClass(get_called_class());
+        $dir = dirname($reflector->getFileName());
+        Fields::load($dir);
+    }
+
+    public static function getBlockName(): string
+    {
+        $reflector = new \ReflectionClass(get_called_class());
+
+        // get directory of block
+        $dir = dirname($reflector->getFileName());
+
+        // load json file
+        $json = file_get_contents($dir . '/block.json');
+        $data = json_decode($json, true);
+
+        return $data['name'];
+    }
 }
