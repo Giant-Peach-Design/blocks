@@ -12,6 +12,6 @@
     }
   ],
   "require": {
-    "giantpeach/twiglet": "^1.0"
+    "giantpeach/twiglet": "3.0.x-dev"
   }
 }
