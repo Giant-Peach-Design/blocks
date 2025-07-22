@@ -34,7 +34,7 @@ class Fields {
         }
 
         // Generate keys for the field group and all fields if they don't exist
-        $fields = static::generateKeys($fields);
+        $fields = static::generateKeys($fields, $blockName);
 
         // Set block location if not already set
         $fields = static::setBlockLocation($fields, $blockName);
@@ -47,15 +47,18 @@ class Fields {
   /**
    * Generate ACF keys for field groups and fields that don't have them
    */
-  private static function generateKeys(array $fields): array {
+  private static function generateKeys(array $fields, string $blockName): array {
+    // Extract just the block name part (e.g., "scrollvideo" from "giantpeach/scrollvideo")
+    $blockShortName = str_replace('giantpeach/', '', $blockName);
+    
     // Generate key for the field group if it doesn't exist
     if (!isset($fields['key'])) {
-      $fields['key'] = 'group_' . uniqid();
+      $fields['key'] = 'group_' . $blockShortName;
     }
 
     // Generate keys for fields
     if (isset($fields['fields']) && is_array($fields['fields'])) {
-      $fields['fields'] = static::generateFieldKeys($fields['fields']);
+      $fields['fields'] = static::generateFieldKeys($fields['fields'], $blockShortName);
     }
 
     return $fields;
@@ -64,32 +67,43 @@ class Fields {
   /**
    * Recursively generate keys for fields and sub-fields
    */
-  private static function generateFieldKeys(array $fields): array {
+  private static function generateFieldKeys(array $fields, string $blockName, string $prefix = ''): array {
     foreach ($fields as &$field) {
       if (!isset($field['key'])) {
-        $field['key'] = 'field_' . uniqid();
+        $fieldName = $field['name'] ?? 'unnamed';
+        $keyName = $prefix ? $prefix . '_' . $fieldName : $blockName . '_' . $fieldName;
+        $field['key'] = 'field_' . $keyName;
       }
 
       // Handle repeater/flexible content sub-fields
       if (isset($field['sub_fields']) && is_array($field['sub_fields'])) {
-        $field['sub_fields'] = static::generateFieldKeys($field['sub_fields']);
+        $fieldName = $field['name'] ?? 'unnamed';
+        $subPrefix = $prefix ? $prefix . '_' . $fieldName : $blockName . '_' . $fieldName;
+        $field['sub_fields'] = static::generateFieldKeys($field['sub_fields'], $blockName, $subPrefix);
       }
 
       // Handle flexible content layouts
       if (isset($field['layouts']) && is_array($field['layouts'])) {
+        $fieldName = $field['name'] ?? 'unnamed';
         foreach ($field['layouts'] as &$layout) {
           if (!isset($layout['key'])) {
-            $layout['key'] = 'layout_' . uniqid();
+            $layoutName = $layout['name'] ?? 'unnamed';
+            $keyName = $prefix ? $prefix . '_' . $fieldName . '_' . $layoutName : $blockName . '_' . $fieldName . '_' . $layoutName;
+            $layout['key'] = 'layout_' . $keyName;
           }
           if (isset($layout['sub_fields']) && is_array($layout['sub_fields'])) {
-            $layout['sub_fields'] = static::generateFieldKeys($layout['sub_fields']);
+            $layoutName = $layout['name'] ?? 'unnamed';
+            $subPrefix = $prefix ? $prefix . '_' . $fieldName . '_' . $layoutName : $blockName . '_' . $fieldName . '_' . $layoutName;
+            $layout['sub_fields'] = static::generateFieldKeys($layout['sub_fields'], $blockName, $subPrefix);
           }
         }
       }
 
       // Handle group sub-fields
       if ($field['type'] === 'group' && isset($field['sub_fields']) && is_array($field['sub_fields'])) {
-        $field['sub_fields'] = static::generateFieldKeys($field['sub_fields']);
+        $fieldName = $field['name'] ?? 'unnamed';
+        $subPrefix = $prefix ? $prefix . '_' . $fieldName : $blockName . '_' . $fieldName;
+        $field['sub_fields'] = static::generateFieldKeys($field['sub_fields'], $blockName, $subPrefix);
       }
     }
 
