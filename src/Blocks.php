@@ -49,6 +49,9 @@ abstract class Blocks
         $blockJson = $blockDir . '/block.json';
         register_block_type($blockJson);
       }
+
+      // register fields for this block
+      $block::registerFields();
     }
   }
 
